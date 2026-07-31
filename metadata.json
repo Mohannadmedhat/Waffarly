@@ -1,0 +1,6 @@
+{
+  "name": "Waffarly - وافرلي",
+  "description": "تطبيق Waffarly الرقمي للتسوق الذكي، مقارنة الأسعار، كاش باك المتاجر، ومساعد الشراء بالذكاء الاصطناعي.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
