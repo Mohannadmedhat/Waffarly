@@ -128,81 +128,78 @@ export const AccountTab: React.FC<AccountTabProps> = ({
     <div className="pt-24 pb-32 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 animate-fade-in text-[#dae2fd]">
       
       {/* ═══ PROFILE HERO CARD ═══ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#171f33] via-[#1e263a] to-[#131b2e] rounded-[36px] p-6 sm:p-8 border border-[#bdc2ff]/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-        {/* Decorative Ambient Lighting */}
-        <div className="absolute -top-24 -right-24 w-60 h-60 bg-[#8700d0]/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-60 h-60 bg-[#2d3fe3]/20 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#1a2238] via-[#151c2e] to-[#111726] rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
+        {/* Subtle Ambient Glow */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#3647ea]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#8700d0]/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
-          {/* User Info Header */}
-          <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-right">
-            {/* Avatar with Glow Ring */}
-            <div className="relative group">
-              <div className="w-24 h-24 rounded-3xl bg-gradient-to-tr from-[#2d3fe3] via-[#8700d0] to-[#7dffa2] p-1 shadow-xl shadow-[#8700d0]/25 transition-transform duration-300 group-hover:scale-105">
-                <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNKKxZNunlo4Xl5JGY-2APcUccKP3Dtb2BPgZ0EqQvgA91Yjz-h_sHrLp3-vOEQB7WpX-YgGRDGsR7AB7hfgfR4LYdvD95Hvcv64alI7FYk_zNxU9P0JiVEckeMxSsS-lXnjLZqBVqfysYRqCIh-lF5s9Tj2hNXCQV5WpN_VchWKTWvrkzGSMtmDLoAd76Kf21uJmaLhM7mvjEuObbVo5s3iKSVBGl7dKparX1-CLYBavCwS0wOHYWu40sLQjmjGV3eghdTZ4y3oz4"
-                  alt="أحمد علي"
-                  className="w-full h-full object-cover rounded-[22px]"
-                />
-              </div>
-              <span className="absolute -bottom-2 -left-2 bg-[#7dffa2] text-[#003918] text-[10px] font-black px-2 py-0.5 rounded-full border-2 border-[#131b2e] shadow-md">
-                نشط الآن
-              </span>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Main User Info */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-right">
+            {/* Clean Avatar */}
+            <div className="relative shrink-0">
+              <img
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80"
+                alt="أحمد علي"
+                className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl object-cover border-2 border-white/15 shadow-md"
+              />
+              <span className="absolute bottom-1 right-1 w-4 h-4 bg-[#7dffa2] border-2 border-[#151c2e] rounded-full shadow-sm" title="نشط الآن" />
             </div>
 
-            {/* Profile Details */}
-            <div className="space-y-1.5">
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <h1 className="font-['Cairo'] font-black text-2xl text-[#dae2fd]">أحمد علي</h1>
-                <span className="bg-[#8700d0]/25 text-[#e3b5ff] border border-[#e3b5ff]/30 text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1">
-                  <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span>
+            {/* Profile Info */}
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+                <h1 className="font-['Cairo'] font-bold text-2xl text-white tracking-wide">أحمد علي</h1>
+                <span className="bg-[#8700d0]/20 text-[#e3b5ff] border border-[#e3b5ff]/20 text-xs font-semibold px-3 py-0.5 rounded-full flex items-center gap-1">
+                  <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span>
                   عضو بلاتيني
                 </span>
               </div>
-              <p className="text-[#c5c5d8] text-xs dir-ltr text-center sm:text-right font-mono">ahmed.ali@example.com</p>
 
-              {/* Referral Code Quick Copy Pill */}
-              <div className="pt-1 flex items-center justify-center sm:justify-start gap-2">
-                <span className="text-[11px] text-[#c5c5d8]">كود الدعوة الخاص بك:</span>
+              <p className="text-[#a1b0cb] text-xs font-medium dir-ltr text-center sm:text-right">ahmed.ali@example.com</p>
+
+              {/* Referral Code Box */}
+              <div className="pt-1 flex items-center justify-center sm:justify-start gap-2 text-xs">
+                <span className="text-[#8c9bb4]">كود الدعوة:</span>
                 <button
                   onClick={handleCopyReferral}
-                  className="px-2.5 py-1 rounded-xl bg-[#060e20] border border-[#bdc2ff]/20 text-xs font-mono font-bold text-[#7dffa2] hover:bg-[#222a3d] transition-all flex items-center gap-1 active:scale-95"
+                  className="px-3 py-1 rounded-lg bg-[#0b1220] border border-white/10 text-xs font-mono font-bold text-[#7dffa2] hover:bg-[#131d33] transition-all flex items-center gap-1.5 active:scale-95"
                 >
                   <span>WAFFAR2026</span>
-                  <span className="material-symbols-outlined text-xs">{copiedCode ? 'check' : 'content_copy'}</span>
+                  <span className="material-symbols-outlined text-xs text-[#8c9bb4]">{copiedCode ? 'check' : 'content_copy'}</span>
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Quick Reward Action Button */}
+          {/* Quick Action */}
           <button
             onClick={() => onOpenReferral && onOpenReferral()}
-            className="w-full md:w-auto px-5 py-3.5 rounded-2xl bg-gradient-to-r from-[#8700d0] via-[#3647ea] to-[#2d3fe3] text-white font-['Cairo'] font-bold text-xs shadow-xl shadow-[#8700d0]/30 hover:opacity-95 transition-all active:scale-95 flex items-center justify-center gap-2.5 shrink-0 border border-white/10"
+            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-[#3647ea] to-[#8700d0] text-white font-['Cairo'] font-bold text-xs shadow-lg hover:shadow-indigo-500/20 hover:opacity-95 transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0 border border-white/10"
           >
-            <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>card_giftcard</span>
+            <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>card_giftcard</span>
             <span>شارك الكود واربح 100 ج.م</span>
           </button>
         </div>
 
         {/* ═══ STATS BENTO ROW ═══ */}
         <div className="grid grid-cols-3 gap-3 mt-6 pt-6 border-t border-white/10">
-          <div className="bg-[#0b1326]/60 backdrop-blur-md border border-white/5 rounded-2xl p-3.5 text-center">
-            <p className="text-[11px] text-[#c5c5d8] mb-1">إجمالي التوفير</p>
-            <p className="font-['Cairo'] font-black text-xl text-[#7dffa2]"><bdi>500 ج.م</bdi></p>
-            <span className="text-[9px] text-[#7dffa2]/80 font-bold block mt-0.5">وفرت 18% هذا الشهر</span>
+          <div className="bg-[#0b1220]/70 backdrop-blur-md border border-white/5 rounded-xl p-3.5 text-center">
+            <p className="text-[11px] text-[#8c9bb4] mb-1 font-medium">إجمالي التوفير</p>
+            <p className="font-['Cairo'] font-bold text-lg sm:text-xl text-[#7dffa2]"><bdi>500 ج.م</bdi></p>
+            <span className="text-[10px] text-[#7dffa2]/80 font-medium block mt-0.5">وفرت 18% هذا الشهر</span>
           </div>
 
-          <div className="bg-[#0b1326]/60 backdrop-blur-md border border-white/5 rounded-2xl p-3.5 text-center">
-            <p className="text-[11px] text-[#c5c5d8] mb-1">رصيد الكاش باك</p>
-            <p className="font-['Cairo'] font-black text-xl text-[#e3b5ff]"><bdi>1,250 ج.م</bdi></p>
-            <span className="text-[9px] text-[#e3b5ff]/80 font-bold block mt-0.5">جاهز للسحب المباشر</span>
+          <div className="bg-[#0b1220]/70 backdrop-blur-md border border-white/5 rounded-xl p-3.5 text-center">
+            <p className="text-[11px] text-[#8c9bb4] mb-1 font-medium">رصيد الكاش باك</p>
+            <p className="font-['Cairo'] font-bold text-lg sm:text-xl text-[#e3b5ff]"><bdi>1,250 ج.م</bdi></p>
+            <span className="text-[10px] text-[#e3b5ff]/80 font-medium block mt-0.5">جاهز للسحب</span>
           </div>
 
-          <div className="bg-[#0b1326]/60 backdrop-blur-md border border-white/5 rounded-2xl p-3.5 text-center">
-            <p className="text-[11px] text-[#c5c5d8] mb-1">الكوبونات المحفوظة</p>
-            <p className="font-['Cairo'] font-black text-xl text-[#bdc2ff]">8 كوبونات</p>
-            <span className="text-[9px] text-[#bdc2ff]/80 font-bold block mt-0.5">صالة العروض النشطة</span>
+          <div className="bg-[#0b1220]/70 backdrop-blur-md border border-white/5 rounded-xl p-3.5 text-center">
+            <p className="text-[11px] text-[#8c9bb4] mb-1 font-medium">الكوبونات المحفوظة</p>
+            <p className="font-['Cairo'] font-bold text-lg sm:text-xl text-[#bdc2ff]">8 كوبونات</p>
+            <span className="text-[10px] text-[#bdc2ff]/80 font-medium block mt-0.5">عروض نشطة</span>
           </div>
         </div>
       </section>
