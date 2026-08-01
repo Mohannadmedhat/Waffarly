@@ -20,6 +20,7 @@ import { ProductComparisonModal } from './components/ProductComparisonModal';
 import { GiftCardsHubModal } from './components/GiftCardsHubModal';
 import { LuckySpinModal } from './components/LuckySpinModal';
 import { SupportTicketModal } from './components/SupportTicketModal';
+import { StoreDealsModal } from './components/StoreDealsModal';
 import { CartDrawer } from './components/CartDrawer';
 import { GlobalToast } from './components/GlobalToast';
 
@@ -37,6 +38,7 @@ function AppInner() {
   const [isGiftCardsOpen, setIsGiftCardsOpen] = useState<boolean>(false);
   const [isLuckySpinOpen, setIsLuckySpinOpen] = useState<boolean>(false);
   const [isSupportOpen, setIsSupportOpen] = useState<boolean>(false);
+  const [isStoreDealsOpen, setIsStoreDealsOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('Sony WH-1000XM5');
 
   const handleSearchTrigger = (query: string) => {
@@ -155,6 +157,11 @@ function AppInner() {
       <GiftCardsHubModal isOpen={isGiftCardsOpen} onClose={() => setIsGiftCardsOpen(false)} />
       <LuckySpinModal isOpen={isLuckySpinOpen} onClose={() => setIsLuckySpinOpen(false)} />
       <SupportTicketModal isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
+      <StoreDealsModal
+        isOpen={isStoreDealsOpen}
+        onClose={() => setIsStoreDealsOpen(false)}
+        onSelectProduct={() => setIsProductDetailOpen(true)}
+      />
     </div>
   );
 }
