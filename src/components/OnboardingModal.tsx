@@ -14,12 +14,12 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onClos
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[100] bg-[#0b1326]/85 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 animate-fade-in text-[#dae2fd] cursor-pointer"
+      className="fixed inset-0 z-[120] bg-[#0b1326]/85 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-fade-in text-[#dae2fd] cursor-pointer"
     >
       {/* Centered Desktop-Optimized Card Container */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-4xl bg-[#131b2e] border border-[#bdc2ff]/25 rounded-[36px] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[520px] cursor-default"
+        className="relative w-full max-w-4xl bg-[#131b2e] border border-[#bdc2ff]/25 rounded-[36px] shadow-[0_20px_60px_rgba(0,0,0,0.85)] overflow-hidden flex flex-col md:flex-row my-auto max-h-[90vh] overflow-y-auto custom-scrollbar cursor-default"
       >
         {/* Background Ambient Glows inside Card */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
