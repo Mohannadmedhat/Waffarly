@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { DealItem } from '../types';
 import { mockSearchDeals } from '../data/mockData';
+import { useWishlist } from '../context/WishlistContext';
 
 interface SearchTabProps {
   searchQuery: string;
@@ -15,30 +16,47 @@ export const SearchTab: React.FC<SearchTabProps> = ({
   onSelectDeal,
   onOpenComparison,
 }) => {
+  const { wishlistIds, toggleWishlist: ctxToggle, addToCart, isInCart } = useWishlist();
   const [activeSort, setActiveSort] = useState<'cheapest' | 'price-desc' | 'cashback' | 'wishlist'>('cheapest');
   const [selectedStoreFilter, setSelectedStoreFilter] = useState<string>('all');
   const [isAlertActive, setIsAlertActive] = useState(false);
-  const [wishlistIds, setWishlistIds] = useState<Set<string>>(new Set());
   const [priceMin, setPriceMin] = useState<number>(0);
   const [priceMax, setPriceMax] = useState<number>(100000);
   const [showPriceFilter, setShowPriceFilter] = useState(false);
-  const [wishlistToast, setWishlistToast] = useState<string | null>(null);
 
   const displayQuery = searchQuery || 'Sony WH-1000XM5';
 
-  const toggleWishlist = (dealId: string, dealTitle: string, e: React.MouseEvent) => {
+  const handleToggleWishlist = (deal: DealItem, e: React.MouseEvent) => {
     e.stopPropagation();
-    setWishlistIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(dealId)) {
-        next.delete(dealId);
-        setWishlistToast(`تمت إزالة "${dealTitle}" من المفضلة`);
-      } else {
-        next.add(dealId);
-        setWishlistToast(`❤️ تمت إضافة "${dealTitle}" للمفضلة`);
-      }
-      setTimeout(() => setWishlistToast(null), 2500);
-      return next;
+    ctxToggle({
+      id: deal.id,
+      title: deal.title,
+      price: deal.price,
+      originalPrice: deal.originalPrice,
+      currency: deal.currency,
+      store: deal.store,
+      storeLogo: deal.storeLogo,
+      productImage: deal.productImage,
+      cashbackAmount: deal.cashbackAmount,
+      couponCode: deal.couponCode,
+      discountPercentage: deal.discountPercentage,
+    });
+  };
+
+  const handleAddToCart = (deal: DealItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    addToCart({
+      id: deal.id,
+      title: deal.title,
+      price: deal.price,
+      originalPrice: deal.originalPrice,
+      currency: deal.currency,
+      store: deal.store,
+      storeLogo: deal.storeLogo,
+      productImage: deal.productImage,
+      cashbackAmount: deal.cashbackAmount,
+      couponCode: deal.couponCode,
+      discountPercentage: deal.discountPercentage,
     });
   };
 
@@ -83,14 +101,6 @@ export const SearchTab: React.FC<SearchTabProps> = ({
 
   return (
     <div className="pt-24 pb-28 px-4 sm:px-6 max-w-6xl mx-auto space-y-5 animate-fade-in">
-
-      {/* Wishlist Toast */}
-      {wishlistToast && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[200] bg-[#131b2e] border border-[#bdc2ff]/30 text-[#dae2fd] text-xs font-bold px-5 py-2.5 rounded-2xl shadow-2xl animate-fade-in flex items-center gap-2">
-          <span className="material-symbols-outlined text-[#e3b5ff] text-sm">favorite</span>
-          {wishlistToast}
-        </div>
-      )}
 
       {/* Search Header Bar & AI Banner */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
@@ -277,12 +287,13 @@ export const SearchTab: React.FC<SearchTabProps> = ({
 
                   {/* Wishlist Heart Button */}
                   <button
-                    onClick={(e) => toggleWishlist(deal.id, deal.title, e)}
-                    className={`absolute top-2.5 left-2.5 w-9 h-9 rounded-xl flex items-center justify-center transition-all active:scale-90 shadow-lg ${
+                    onClick={(e) => handleToggleWishlist(deal, e)}
+                    className={`wishlist-btn absolute top-2.5 left-2.5 w-9 h-9 rounded-xl flex items-center justify-center shadow-lg ${
                       inWishlist
                         ? 'bg-rose-500 text-white'
                         : 'bg-[#222a3d]/80 text-[#c5c5d8] hover:text-rose-400 hover:bg-[#222a3d]'
                     }`}
+                    aria-label={inWishlist ? 'إزالة من المفضلة' : 'أضف للمفضلة'}
                   >
                     <span
                       className="material-symbols-outlined text-base"
@@ -360,18 +371,35 @@ export const SearchTab: React.FC<SearchTabProps> = ({
                   )}
                 </div>
 
-                {/* Action Button */}
-                <button
-                  onClick={(e) => { e.stopPropagation(); onSelectDeal(deal); }}
-                  className={`w-full py-3 rounded-2xl font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-2 ${
-                    deal.isBestValue
-                      ? 'bg-gradient-to-r from-[#2d3fe3] to-[#3647ea] text-white shadow-lg shadow-[#2d3fe3]/20'
-                      : 'bg-[#222a3d] text-[#bdc2ff] hover:bg-[#2d3449]'
-                  }`}
-                >
-                  <span>{deal.isBestValue ? 'تسوق الآن واربح الكاش باك' : 'تفاصيل العرض والمقارنة'}</span>
-                  <span className="material-symbols-outlined text-base">arrow_back</span>
-                </button>
+                {/* Action Buttons */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={(e) => handleAddToCart(deal, e)}
+                    className={`flex-1 py-3 rounded-2xl font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-1.5 ripple ${
+                      isInCart(deal.id)
+                        ? 'bg-[#7dffa2]/20 text-[#7dffa2] border border-[#7dffa2]/30'
+                        : 'bg-[#222a3d] text-[#bdc2ff] hover:bg-[#2d3449]'
+                    }`}
+                    aria-label="أضف للسلة"
+                  >
+                    <span className="material-symbols-outlined text-base" style={isInCart(deal.id) ? { fontVariationSettings: "'FILL' 1" } : {}}>
+                      shopping_cart
+                    </span>
+                    <span>{isInCart(deal.id) ? 'في السلة' : 'أضف للسلة'}</span>
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onSelectDeal(deal); }}
+                    className={`flex-1 py-3 rounded-2xl font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-1.5 ripple ${
+                      deal.isBestValue
+                        ? 'bg-gradient-to-r from-[#2d3fe3] to-[#8700d0] text-white shadow-lg shadow-[#2d3fe3]/20'
+                        : 'bg-[#222a3d] text-[#c5c5d8] hover:bg-[#2d3449]'
+                    }`}
+                    aria-label="عرض التفاصيل"
+                  >
+                    <span className="material-symbols-outlined text-base">info</span>
+                    <span>التفاصيل</span>
+                  </button>
+                </div>
               </div>
             );
           })}

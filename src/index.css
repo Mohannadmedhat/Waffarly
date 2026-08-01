@@ -1,15 +1,32 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════
+   ARABIC TYPOGRAPHY SYSTEM
+═══════════════════════════════════════ */
+
 @layer utilities {
+
+  /* ── Font Families ── */
   .font-headline {
-    font-family: 'Cairo', sans-serif;
+    font-family: 'Cairo', 'Noto Sans Arabic', sans-serif;
   }
   .font-body {
-    font-family: 'IBM Plex Arabic', sans-serif;
+    font-family: 'Noto Sans Arabic', 'IBM Plex Arabic', sans-serif;
   }
   .font-label {
-    font-family: 'IBM Plex Arabic', sans-serif;
+    font-family: 'Noto Sans Arabic', 'IBM Plex Arabic', sans-serif;
+    letter-spacing: 0.01em;
   }
+
+  /* ── Arabic Type Scale ── */
+  .text-ar-xs   { font-size: 11px; line-height: 1.6; }
+  .text-ar-sm   { font-size: 13px; line-height: 1.65; }
+  .text-ar-base { font-size: 15px; line-height: 1.7; }
+  .text-ar-lg   { font-size: 18px; line-height: 1.6; }
+  .text-ar-xl   { font-size: 22px; line-height: 1.45; }
+  .text-ar-2xl  { font-size: 28px; line-height: 1.35; }
+
+  /* ── Material Icons ── */
   .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
     font-weight: normal;
@@ -25,62 +42,117 @@
     -webkit-font-smoothing: antialiased;
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   }
+
+  /* ── Glass Surfaces ── */
   .glass-card, .glass-panel {
-    background: rgba(45, 52, 73, 0.6);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(19, 27, 46, 0.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
   }
   .glass-bubble {
-    background: rgba(45, 52, 73, 0.6);
+    background: rgba(45, 52, 73, 0.55);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(189, 194, 255, 0.1);
+    border: 1px solid rgba(189, 194, 255, 0.08);
   }
+  .glass-strong {
+    background: rgba(11, 19, 38, 0.88);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+  }
+
+  /* ── Brand Gradients ── */
   .ai-gradient {
     background: linear-gradient(135deg, #8700d0 0%, #2d3fe3 100%);
   }
-  
-  /* Bi-directional text isolation helpers */
-  .bidi-isolate {
-    unicode-bidi: isolate;
+  .cashback-gradient {
+    background: linear-gradient(135deg, #2d3fe3 0%, #8700d0 60%, #222a3d 100%);
   }
-  .bidi-ltr {
-    direction: ltr;
-    display: inline-block;
-    unicode-bidi: isolate;
+
+  /* ── Bidi Text Helpers ── */
+  .bidi-isolate { unicode-bidi: isolate; }
+  .bidi-ltr { direction: ltr; display: inline-block; unicode-bidi: isolate; }
+  .bidi-rtl { direction: rtl; display: inline-block; unicode-bidi: isolate; }
+
+  /* ── Ripple Effect ── */
+  .ripple {
+    position: relative;
+    overflow: hidden;
   }
-  .bidi-rtl {
-    direction: rtl;
-    display: inline-block;
-    unicode-bidi: isolate;
+  .ripple::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.14) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: inherit;
+  }
+  .ripple:active::after {
+    opacity: 1;
+    transition: opacity 0s;
+  }
+
+  /* ── Glow Utilities ── */
+  .glow-blue   { box-shadow: 0 0 20px rgba(45, 63, 227, 0.4); }
+  .glow-purple { box-shadow: 0 0 20px rgba(135, 0, 208, 0.4); }
+  .glow-green  { box-shadow: 0 0 20px rgba(125, 255, 162, 0.3); }
+
+  /* ── Wishlist Button ── */
+  .wishlist-btn {
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.2s ease,
+                box-shadow 0.2s ease;
+  }
+  .wishlist-btn:active {
+    transform: scale(0.85);
   }
 }
 
-bdi {
-  unicode-bidi: isolate;
+/* ═══════════════════════════════════════
+   GLOBAL BASE
+═══════════════════════════════════════ */
+
+bdi { unicode-bidi: isolate; }
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(189, 194, 255, 0.18) transparent;
+}
+html::-webkit-scrollbar       { width: 5px; }
+html::-webkit-scrollbar-track { background: transparent; }
+html::-webkit-scrollbar-thumb {
+  background: rgba(189, 194, 255, 0.18);
+  border-radius: 4px;
 }
 
 body {
+  font-family: 'Noto Sans Arabic', 'IBM Plex Arabic', sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hide scrollbars for clean tab navigation */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+/* ═══════════════════════════════════════
+   SCROLLBAR UTILITIES
+═══════════════════════════════════════ */
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-/* ═══ Page Transition Animations ═══ */
+/* ═══════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════ */
+
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  from { opacity: 0; transform: translateY(20px) scale(0.99); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
@@ -89,9 +161,14 @@ body {
   to   { opacity: 1; transform: translateX(0); }
 }
 
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 @keyframes popIn {
-  0%   { opacity: 0; transform: scale(0.85); }
-  70%  { transform: scale(1.04); }
+  0%   { opacity: 0; transform: scale(0.8); }
+  65%  { transform: scale(1.06); }
   100% { opacity: 1; transform: scale(1); }
 }
 
@@ -100,39 +177,114 @@ body {
   100% { background-position: 200% 0; }
 }
 
-/* Apply fade + slide-up on all tab content */
-.animate-fade-in {
-  animation: fadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* Heart pop when adding to wishlist */
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.45); }
+  60%  { transform: scale(0.88); }
+  100% { transform: scale(1); }
 }
 
-.animate-slide-up {
-  animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* Number counter / price update */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.animate-slide-in-right {
-  animation: slideInRight 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* Badge pulse for cart/notifications */
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(125, 255, 162, 0.55); }
+  50%       { box-shadow: 0 0 0 5px rgba(125, 255, 162, 0); }
 }
 
-.animate-pop-in {
-  animation: popIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* Toast notification entry */
+@keyframes toastIn {
+  0%   { opacity: 0; transform: translateY(-14px) scale(0.94); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Skeleton shimmer loader */
+/* Confetti particle fall */
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(70px) rotate(360deg); opacity: 0; }
+}
+
+/* Floating gentle bounce */
+@keyframes floatBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+/* Cart drawer slide (LTR used, RTL handled via transform) */
+@keyframes drawerSlideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+/* ── Animation Classes ── */
+.animate-fade-in        { animation: fadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-slide-up       { animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-slide-in-right { animation: slideInRight 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-slide-in-left  { animation: slideInLeft 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-pop-in         { animation: popIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-heart-pop      { animation: heartPop 0.38s cubic-bezier(0.22, 1, 0.36, 1); }
+.animate-count-up       { animation: countUp 0.3s ease both; }
+.animate-toast          { animation: toastIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-float          { animation: floatBounce 2.2s ease-in-out infinite; }
+.badge-pulse            { animation: badgePulse 2s infinite; }
+
+/* ── Skeleton Loader ── */
 .skeleton {
-  background: linear-gradient(90deg, #131b2e 25%, #222a3d 50%, #131b2e 75%);
+  background: linear-gradient(90deg, #131b2e 25%, #1e2a42 50%, #131b2e 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 1.6s infinite;
   border-radius: 12px;
 }
 
-/* Staggered children animation */
+/* ── Staggered Children ── */
 .stagger-children > * {
   animation: fadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-.stagger-children > *:nth-child(1)  { animation-delay: 0.05s; }
-.stagger-children > *:nth-child(2)  { animation-delay: 0.10s; }
-.stagger-children > *:nth-child(3)  { animation-delay: 0.15s; }
-.stagger-children > *:nth-child(4)  { animation-delay: 0.20s; }
-.stagger-children > *:nth-child(5)  { animation-delay: 0.25s; }
-.stagger-children > *:nth-child(6)  { animation-delay: 0.30s; }
+.stagger-children > *:nth-child(1)  { animation-delay: 0.04s; }
+.stagger-children > *:nth-child(2)  { animation-delay: 0.08s; }
+.stagger-children > *:nth-child(3)  { animation-delay: 0.12s; }
+.stagger-children > *:nth-child(4)  { animation-delay: 0.16s; }
+.stagger-children > *:nth-child(5)  { animation-delay: 0.20s; }
+.stagger-children > *:nth-child(6)  { animation-delay: 0.24s; }
+.stagger-children > *:nth-child(7)  { animation-delay: 0.28s; }
+.stagger-children > *:nth-child(8)  { animation-delay: 0.32s; }
 
+/* ═══════════════════════════════════════
+   CONFETTI PIECES
+═══════════════════════════════════════ */
+
+.confetti-piece {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  animation: confettiFall 0.85s ease-out forwards;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════
+   CART DRAWER
+═══════════════════════════════════════ */
+
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 60;
+  width: min(380px, 92vw);
+  background: #0d1527;
+  border-right: 1px solid rgba(189, 194, 255, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow-y: auto;
+}
+.cart-drawer.open {
+  transform: translateX(0);
+  box-shadow: 8px 0 40px rgba(0, 0, 0, 0.6);
+}

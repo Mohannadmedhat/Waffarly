@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavTab, DealItem } from './types';
+import { WishlistProvider } from './context/WishlistContext';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
 import { HomeTab } from './components/HomeTab';
@@ -19,8 +20,10 @@ import { ProductComparisonModal } from './components/ProductComparisonModal';
 import { GiftCardsHubModal } from './components/GiftCardsHubModal';
 import { LuckySpinModal } from './components/LuckySpinModal';
 import { SupportTicketModal } from './components/SupportTicketModal';
+import { CartDrawer } from './components/CartDrawer';
+import { GlobalToast } from './components/GlobalToast';
 
-export function App() {
+function AppInner() {
   const [activeTab, setActiveTab] = useState<NavTab>('home');
   const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(false);
   const [isProductDetailOpen, setIsProductDetailOpen] = useState<boolean>(false);
@@ -41,19 +44,25 @@ export function App() {
     setActiveTab('search');
   };
 
-  const handleSelectDeal = (deal: DealItem) => {
+  const handleSelectDeal = (_deal: DealItem) => {
     setIsProductDetailOpen(true);
   };
 
   return (
-    <div className="min-h-screen bg-[#0b1326] text-[#dae2fd] font-['IBM_Plex_Arabic',sans-serif] relative overflow-x-hidden">
-      {/* Background Ambient Glow Effects */}
+    <div className="min-h-screen bg-[#0b1326] text-[#dae2fd] font-body relative overflow-x-hidden">
+      {/* Background Ambient Glow */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-[#2d3fe3]/10 rounded-full blur-[140px]"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#8700d0]/10 rounded-full blur-[140px]"></div>
+        <div className="absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-[#2d3fe3]/8 rounded-full blur-[160px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#8700d0]/8 rounded-full blur-[160px]" />
       </div>
 
-      {/* Main Header */}
+      {/* Global Toast */}
+      <GlobalToast />
+
+      {/* Cart Drawer */}
+      <CartDrawer />
+
+      {/* Header */}
       <Header
         onOpenOnboarding={() => setIsOnboardingOpen(true)}
         onOpenAccount={() => setActiveTab('account')}
@@ -63,8 +72,8 @@ export function App() {
         onOpenLuckySpin={() => setIsLuckySpinOpen(true)}
       />
 
-      {/* Body Views */}
-      <main className="relative z-10">
+      {/* Main Content — offset for desktop sidebar */}
+      <main className="relative z-10 md:pr-[72px]">
         {activeTab === 'home' && (
           <div key="home" className="animate-slide-up">
             <HomeTab
@@ -84,9 +93,7 @@ export function App() {
 
         {activeTab === 'assistant' && (
           <div key="assistant" className="animate-slide-up">
-            <AssistantTab
-              onOpenProductDetail={() => setIsProductDetailOpen(true)}
-            />
+            <AssistantTab onOpenProductDetail={() => setIsProductDetailOpen(true)} />
           </div>
         )}
 
@@ -128,71 +135,35 @@ export function App() {
         )}
       </main>
 
-      {/* Navigation Shell */}
+      {/* Navigation */}
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Modals */}
-      <OnboardingModal
-        isOpen={isOnboardingOpen}
-        onClose={() => setIsOnboardingOpen(false)}
-      />
-
-      <ProductDetailModal
-        isOpen={isProductDetailOpen}
-        onClose={() => setIsProductDetailOpen(false)}
-      />
-
-      <CashbackWithdrawModal
-        isOpen={isWithdrawOpen}
-        onClose={() => setIsWithdrawOpen(false)}
-      />
-
-      <NotificationCenterModal
-        isOpen={isNotificationsOpen}
-        onClose={() => setIsNotificationsOpen(false)}
-      />
-
+      <OnboardingModal isOpen={isOnboardingOpen} onClose={() => setIsOnboardingOpen(false)} />
+      <ProductDetailModal isOpen={isProductDetailOpen} onClose={() => setIsProductDetailOpen(false)} />
+      <CashbackWithdrawModal isOpen={isWithdrawOpen} onClose={() => setIsWithdrawOpen(false)} />
+      <NotificationCenterModal isOpen={isNotificationsOpen} onClose={() => setIsNotificationsOpen(false)} />
       <PriceTrackerModal
         isOpen={isPriceTrackerOpen}
         onClose={() => setIsPriceTrackerOpen(false)}
         onSelectProduct={() => setIsProductDetailOpen(true)}
       />
-
-      <CouponCalculatorModal
-        isOpen={isCouponCalcOpen}
-        onClose={() => setIsCouponCalcOpen(false)}
-      />
-
-      <NearbyDealsModal
-        isOpen={isNearbyDealsOpen}
-        onClose={() => setIsNearbyDealsOpen(false)}
-      />
-
-      <ReferralRewardsModal
-        isOpen={isReferralOpen}
-        onClose={() => setIsReferralOpen(false)}
-      />
-
-      <ProductComparisonModal
-        isOpen={isComparisonOpen}
-        onClose={() => setIsComparisonOpen(false)}
-      />
-
-      <GiftCardsHubModal
-        isOpen={isGiftCardsOpen}
-        onClose={() => setIsGiftCardsOpen(false)}
-      />
-
-      <LuckySpinModal
-        isOpen={isLuckySpinOpen}
-        onClose={() => setIsLuckySpinOpen(false)}
-      />
-
-      <SupportTicketModal
-        isOpen={isSupportOpen}
-        onClose={() => setIsSupportOpen(false)}
-      />
+      <CouponCalculatorModal isOpen={isCouponCalcOpen} onClose={() => setIsCouponCalcOpen(false)} />
+      <NearbyDealsModal isOpen={isNearbyDealsOpen} onClose={() => setIsNearbyDealsOpen(false)} />
+      <ReferralRewardsModal isOpen={isReferralOpen} onClose={() => setIsReferralOpen(false)} />
+      <ProductComparisonModal isOpen={isComparisonOpen} onClose={() => setIsComparisonOpen(false)} />
+      <GiftCardsHubModal isOpen={isGiftCardsOpen} onClose={() => setIsGiftCardsOpen(false)} />
+      <LuckySpinModal isOpen={isLuckySpinOpen} onClose={() => setIsLuckySpinOpen(false)} />
+      <SupportTicketModal isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <WishlistProvider>
+      <AppInner />
+    </WishlistProvider>
   );
 }
 
