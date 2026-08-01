@@ -288,3 +288,33 @@ body {
   transform: translateX(0);
   box-shadow: 8px 0 40px rgba(0, 0, 0, 0.6);
 }
+
+/* ═══════════════════════════════════════
+   WISHLIST BUTTON
+═══════════════════════════════════════ */
+
+.wishlist-btn {
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s;
+}
+.wishlist-btn:active {
+  transform: scale(0.85);
+  animation: heartPop 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ═══════════════════════════════════════
+   POP-IN ANIMATION (win celebration)
+═══════════════════════════════════════ */
+
+@keyframes popIn {
+  0%   { opacity: 0; transform: scale(0.5); }
+  70%  { transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ═══════════════════════════════════════
+   AI GRADIENT
+═══════════════════════════════════════ */
+
+.ai-gradient {
+  background: linear-gradient(135deg, #8700d0, #2d3fe3);
+}

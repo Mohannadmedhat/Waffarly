@@ -100,7 +100,7 @@ export const SearchTab: React.FC<SearchTabProps> = ({
   }, [searchQuery, activeSort, selectedStoreFilter, priceMin, priceMax, wishlistIds]);
 
   return (
-    <div className="pt-24 pb-28 px-4 sm:px-6 max-w-6xl mx-auto space-y-5 animate-fade-in">
+    <div className="pt-28 pb-28 px-4 sm:px-8 max-w-[1360px] mx-auto space-y-6 animate-fade-in">
 
       {/* Search Header Bar & AI Banner */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">

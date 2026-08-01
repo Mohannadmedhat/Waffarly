@@ -73,7 +73,7 @@ function AppInner() {
       />
 
       {/* Main Content — offset for desktop sidebar */}
-      <main className="relative z-10 md:pr-[72px]">
+      <main className="relative z-10 md:pr-[80px]">
         {activeTab === 'home' && (
           <div key="home" className="animate-slide-up">
             <HomeTab

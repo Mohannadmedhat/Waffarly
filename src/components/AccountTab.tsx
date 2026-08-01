@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useWishlist } from '../context/WishlistContext';
+import { EditProfileModal } from './EditProfileModal';
 
 interface AccountTabProps {
   onOpenOnboarding: () => void;
@@ -21,7 +23,15 @@ export const AccountTab: React.FC<AccountTabProps> = ({
   onOpenSupport,
   onOpenGiftCards,
 }) => {
+  const { wishlistItems, cartItems, cartTotal } = useWishlist();
   const [copiedCode, setCopiedCode] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState({
+    name: 'أحمد علي',
+    email: 'ahmed.ali@example.com',
+    phone: '01012345678',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80',
+  });
 
   const handleCopyReferral = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -125,7 +135,7 @@ export const AccountTab: React.FC<AccountTabProps> = ({
   ];
 
   return (
-    <div className="pt-24 pb-32 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 animate-fade-in text-[#dae2fd]">
+    <div className="pt-28 pb-32 px-4 sm:px-8 max-w-5xl mx-auto space-y-8 animate-fade-in text-[#dae2fd]">
       
       {/* ═══ PROFILE HERO CARD ═══ */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#1a2238] via-[#151c2e] to-[#111726] rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
@@ -136,27 +146,40 @@ export const AccountTab: React.FC<AccountTabProps> = ({
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Main User Info */}
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-right">
-            {/* Clean Avatar */}
-            <div className="relative shrink-0">
+            {/* Clean Avatar with Edit Trigger */}
+            <div className="relative shrink-0 group cursor-pointer" onClick={() => setIsEditModalOpen(true)}>
               <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80"
-                alt="أحمد علي"
-                className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl object-cover border-2 border-white/15 shadow-md"
+                src={userProfile.avatar}
+                alt={userProfile.name}
+                className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl object-cover border-2 border-white/15 shadow-md group-hover:border-[#bdc2ff]/60 transition-all"
               />
               <span className="absolute bottom-1 right-1 w-4 h-4 bg-[#7dffa2] border-2 border-[#151c2e] rounded-full shadow-sm" title="نشط الآن" />
+              <div className="absolute inset-0 bg-black/40 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                <span className="material-symbols-outlined text-xl">edit</span>
+              </div>
             </div>
 
             {/* Profile Info */}
             <div className="space-y-2">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
-                <h1 className="font-['Cairo'] font-bold text-2xl text-white tracking-wide">أحمد علي</h1>
+                <h1 className="font-headline font-bold text-2xl text-white tracking-wide">{userProfile.name}</h1>
                 <span className="bg-[#8700d0]/20 text-[#e3b5ff] border border-[#e3b5ff]/20 text-xs font-semibold px-3 py-0.5 rounded-full flex items-center gap-1">
                   <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span>
                   عضو بلاتيني
                 </span>
+
+                {/* Edit Button */}
+                <button
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="px-2.5 py-1 rounded-xl bg-[#222a3d] hover:bg-[#2d3449] border border-white/10 text-[#bdc2ff] text-xs font-bold transition-all flex items-center gap-1 active:scale-95 ripple"
+                  title="تعديل الملف الشخصي"
+                >
+                  <span className="material-symbols-outlined text-sm">edit</span>
+                  <span>تعديل</span>
+                </button>
               </div>
 
-              <p className="text-[#a1b0cb] text-xs font-medium dir-ltr text-center sm:text-right">ahmed.ali@example.com</p>
+              <p className="text-[#a1b0cb] text-xs font-medium dir-ltr text-center sm:text-right">{userProfile.email}</p>
 
               {/* Referral Code Box */}
               <div className="pt-1 flex items-center justify-center sm:justify-start gap-2 text-xs">
@@ -175,7 +198,7 @@ export const AccountTab: React.FC<AccountTabProps> = ({
           {/* Quick Action */}
           <button
             onClick={() => onOpenReferral && onOpenReferral()}
-            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-[#3647ea] to-[#8700d0] text-white font-['Cairo'] font-bold text-xs shadow-lg hover:shadow-indigo-500/20 hover:opacity-95 transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0 border border-white/10"
+            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-[#3647ea] to-[#8700d0] text-white font-headline font-bold text-xs shadow-lg hover:shadow-indigo-500/20 hover:opacity-95 transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0 border border-white/10 ripple"
           >
             <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>card_giftcard</span>
             <span>شارك الكود واربح 100 ج.م</span>
@@ -183,23 +206,29 @@ export const AccountTab: React.FC<AccountTabProps> = ({
         </div>
 
         {/* ═══ STATS BENTO ROW ═══ */}
-        <div className="grid grid-cols-3 gap-3 mt-6 pt-6 border-t border-white/10">
-          <div className="bg-[#0b1220]/70 backdrop-blur-md border border-white/5 rounded-xl p-3.5 text-center">
-            <p className="text-[11px] text-[#8c9bb4] mb-1 font-medium">إجمالي التوفير</p>
-            <p className="font-['Cairo'] font-bold text-lg sm:text-xl text-[#7dffa2]"><bdi>500 ج.م</bdi></p>
-            <span className="text-[10px] text-[#7dffa2]/80 font-medium block mt-0.5">وفرت 18% هذا الشهر</span>
+        <div className="grid grid-cols-4 gap-2.5 mt-6 pt-6 border-t border-white/10">
+          <div className="bg-[#0b1220]/70 backdrop-blur-md border border-white/5 rounded-xl p-3 text-center">
+            <p className="text-[10px] text-[#8c9bb4] mb-1 font-medium">إجمالي التوفير</p>
+            <p className="font-headline font-bold text-base sm:text-lg text-[#7dffa2]"><bdi>5,420 ج.م</bdi></p>
+            <span className="text-[9px] text-[#7dffa2]/80 font-medium block mt-0.5">هذا الشهر 18%</span>
           </div>
 
-          <div className="bg-[#0b1220]/70 backdrop-blur-md border border-white/5 rounded-xl p-3.5 text-center">
-            <p className="text-[11px] text-[#8c9bb4] mb-1 font-medium">رصيد الكاش باك</p>
-            <p className="font-['Cairo'] font-bold text-lg sm:text-xl text-[#e3b5ff]"><bdi>1,250 ج.م</bdi></p>
-            <span className="text-[10px] text-[#e3b5ff]/80 font-medium block mt-0.5">جاهز للسحب</span>
+          <div className="bg-[#0b1220]/70 backdrop-blur-md border border-white/5 rounded-xl p-3 text-center">
+            <p className="text-[10px] text-[#8c9bb4] mb-1 font-medium">رصيد الكاش باك</p>
+            <p className="font-headline font-bold text-base sm:text-lg text-[#e3b5ff]"><bdi>1,250 ج.م</bdi></p>
+            <span className="text-[9px] text-[#e3b5ff]/80 font-medium block mt-0.5">جاهز للسحب</span>
           </div>
 
-          <div className="bg-[#0b1220]/70 backdrop-blur-md border border-white/5 rounded-xl p-3.5 text-center">
-            <p className="text-[11px] text-[#8c9bb4] mb-1 font-medium">الكوبونات المحفوظة</p>
-            <p className="font-['Cairo'] font-bold text-lg sm:text-xl text-[#bdc2ff]">8 كوبونات</p>
-            <span className="text-[10px] text-[#bdc2ff]/80 font-medium block mt-0.5">عروض نشطة</span>
+          <div className="bg-[#0b1220]/70 backdrop-blur-md border border-rose-500/10 rounded-xl p-3 text-center">
+            <p className="text-[10px] text-[#8c9bb4] mb-1 font-medium">مفضلتي</p>
+            <p className="font-headline font-bold text-base sm:text-lg text-[#ffb4ab]">{wishlistItems.length}</p>
+            <span className="text-[9px] text-[#ffb4ab]/80 font-medium block mt-0.5">منتجات</span>
+          </div>
+
+          <div className="bg-[#0b1220]/70 backdrop-blur-md border border-[#7dffa2]/10 rounded-xl p-3 text-center">
+            <p className="text-[10px] text-[#8c9bb4] mb-1 font-medium">سلتي</p>
+            <p className="font-headline font-bold text-base sm:text-lg text-[#7dffa2]">{cartItems.length}</p>
+            <span className="text-[9px] text-[#7dffa2]/80 font-medium block mt-0.5">{cartTotal > 0 ? `${cartTotal.toLocaleString('ar-EG')} ج.م` : 'فارغة'}</span>
           </div>
         </div>
       </section>
@@ -217,7 +246,7 @@ export const AccountTab: React.FC<AccountTabProps> = ({
               <button
                 key={item.id}
                 onClick={item.action}
-                className="w-full p-4 rounded-2xl bg-[#131b2e] border border-[#454656]/20 hover:border-[#bdc2ff]/40 hover:bg-[#171f33] transition-all flex items-center justify-between group text-right shadow-md active:scale-[0.99]"
+                className="w-full p-4 rounded-2xl bg-[#131b2e] border border-[#454656]/20 hover:border-[#bdc2ff]/40 hover:bg-[#171f33] transition-all flex items-center justify-between group text-right shadow-md active:scale-[0.99] ripple"
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 ${item.iconBg}`}>
@@ -251,12 +280,25 @@ export const AccountTab: React.FC<AccountTabProps> = ({
       <section className="pt-2">
         <button
           onClick={() => alert('تم تسجيل الخروج بنجاح')}
-          className="w-full py-4 rounded-2xl bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 text-[#ffb4ab] font-['Cairo'] font-bold text-sm hover:bg-[#ffb4ab]/20 transition-all flex items-center justify-center gap-2 active:scale-98 shadow-lg"
+          className="w-full py-4 rounded-2xl bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 text-[#ffb4ab] font-headline font-bold text-sm hover:bg-[#ffb4ab]/20 transition-all flex items-center justify-center gap-2 active:scale-98 shadow-lg ripple"
         >
           <span className="material-symbols-outlined text-lg">logout</span>
           <span>تسجيل الخروج</span>
         </button>
       </section>
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        currentName={userProfile.name}
+        currentEmail={userProfile.email}
+        currentPhone={userProfile.phone}
+        currentAvatar={userProfile.avatar}
+        onSave={(data) => {
+          setUserProfile(data);
+        }}
+      />
 
     </div>
   );

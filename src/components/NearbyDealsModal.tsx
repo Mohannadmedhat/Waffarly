@@ -9,9 +9,9 @@ interface NearbyDealsModalProps {
 // Extended mock data for the map
 const extendedDeals = [
   ...mockNearbyDeals,
-  { id: 'deal-4', title: 'كافيه أرت هاوس', category: 'مطاعم وكافيهات', discountText: 'اشترِ 1 واحصل على 1', rating: 4.6, distance: 'على بعد 1.8 كم', imageUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=400&q=80' },
-  { id: 'deal-5', title: 'صيدلية النهدي', category: 'صيدليات', discountText: 'خصم 25%', rating: 4.4, distance: 'على بعد 0.5 كم', imageUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80' },
-  { id: 'deal-6', title: 'سينما سيتي ستارز', category: 'ترفيه', discountText: 'كاش باك 12%', rating: 4.9, distance: 'على بعد 3.2 كم', imageUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80' },
+  { id: 'deal-4', title: 'كافيه أرت هاوس', category: 'مطاعم وكافيهات', discountText: 'اشترِ 1 واحصل على 1', rating: 4.6, distance: 'على بعد 1.8 كم', imageUrl: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&auto=format&fit=crop&q=85' },
+  { id: 'deal-5', title: 'صيدلية النهدي', category: 'صيدليات', discountText: 'خصم 25%', rating: 4.4, distance: 'على بعد 0.5 كم', imageUrl: 'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?w=800&auto=format&fit=crop&q=85' },
+  { id: 'deal-6', title: 'سينما سيتي ستارز', category: 'ترفيه', discountText: 'كاش باك 12%', rating: 4.9, distance: 'على بعد 3.2 كم', imageUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&auto=format&fit=crop&q=85' },
 ];
 
 // Fake map pins (positioned as % of container)

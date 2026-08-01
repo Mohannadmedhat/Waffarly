@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useWishlist } from '../context/WishlistContext';
 
 interface WatchedProduct {
   id: string;
@@ -22,6 +23,7 @@ export const PriceTrackerModal: React.FC<PriceTrackerModalProps> = ({
   onClose,
   onSelectProduct,
 }) => {
+  const { addToCart, isInCart } = useWishlist();
   const [newInputUrl, setNewInputUrl] = useState('');
   const [successToast, setSuccessToast] = useState<string | null>(null);
   const [watchedList, setWatchedList] = useState<WatchedProduct[]>([
@@ -178,10 +180,32 @@ export const PriceTrackerModal: React.FC<PriceTrackerModalProps> = ({
 
                 <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                   {item.status === 'dropped' ? (
-                    <span className="bg-[#7dffa2]/15 text-[#7dffa2] border border-[#7dffa2]/30 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                      <span className="material-symbols-outlined text-sm">trending_down</span>
-                      وصل للسعر المفضل!
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="bg-[#7dffa2]/15 text-[#7dffa2] border border-[#7dffa2]/30 px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                        <span className="material-symbols-outlined text-sm">trending_down</span>
+                        وصل للسعر!
+                      </span>
+                      <button
+                        onClick={() => addToCart({
+                          id: item.id,
+                          title: item.name,
+                          price: item.currentPrice,
+                          currency: item.currency,
+                          store: item.store,
+                          storeLogo: '',
+                          productImage: item.image,
+                          cashbackAmount: Math.round(item.currentPrice * 0.05),
+                        })}
+                        className={`px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1 ripple transition-all ${
+                          isInCart(item.id)
+                            ? 'bg-[#7dffa2]/20 text-[#7dffa2] border border-[#7dffa2]/30'
+                            : 'bg-[#7dffa2] text-[#003918] hover:bg-[#6be68f]'
+                        }`}
+                      >
+                        <span className="material-symbols-outlined text-sm">{isInCart(item.id) ? 'check' : 'shopping_cart'}</span>
+                        <span>{isInCart(item.id) ? 'في السلة' : 'شراء'}</span>
+                      </button>
+                    </div>
                   ) : (
                     <span className="bg-[#bdc2ff]/15 text-[#bdc2ff] px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                       <span className="material-symbols-outlined text-sm">schedule</span>
@@ -192,7 +216,7 @@ export const PriceTrackerModal: React.FC<PriceTrackerModalProps> = ({
                   <button
                     onClick={() => handleRemoveTrack(item.id)}
                     title="حذف من قائمة التتبع"
-                    className="w-8 h-8 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 flex items-center justify-center transition-all"
+                    className="w-8 h-8 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 flex items-center justify-center transition-all active:scale-90"
                   >
                     <span className="material-symbols-outlined text-base">delete</span>
                   </button>

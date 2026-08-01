@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ProductDetail } from '../types';
 import { mockProductDetail } from '../data/mockData';
+import { useWishlist } from '../context/WishlistContext';
 
 interface ProductDetailModalProps {
   isOpen: boolean;
@@ -48,6 +49,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   onClose,
   product = mockProductDetail
 }) => {
+  const { toggleWishlist, addToCart, isInWishlist, isInCart } = useWishlist();
   const [selectedImgIndex, setSelectedImgIndex] = useState(0);
   const [graphTimeframe, setGraphTimeframe] = useState<'30' | '90'>('30');
   const [copied, setCopied] = useState(false);
@@ -55,7 +57,35 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
   if (!isOpen) return null;
 
-  const indicator = getBuyIndicator(product);
+  const productId = String(product.id || product.name);
+  const inWishlist = isInWishlist(productId);
+  const inCart     = isInCart(productId);
+  const indicator  = getBuyIndicator(product);
+
+  const handleWishlist = () => toggleWishlist({
+    id: productId,
+    title: product.name,
+    price: product.finalPrice,
+    originalPrice: product.originalPrice,
+    currency: product.currency,
+    store: product.storeName || 'Amazon',
+    storeLogo: product.storeLogo || '',
+    productImage: product.mainImage,
+    cashbackAmount: product.cashbackAmount,
+  });
+
+  const handleAddToCart = () => addToCart({
+    id: productId,
+    title: product.name,
+    price: product.finalPrice,
+    originalPrice: product.originalPrice,
+    currency: product.currency,
+    store: product.storeName || 'Amazon',
+    storeLogo: product.storeLogo || '',
+    productImage: product.mainImage,
+    cashbackAmount: product.cashbackAmount,
+  });
+
 
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -327,29 +357,73 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         </div>
 
         {/* Sticky Bottom Action Buttons */}
-        <div className="p-4 bg-[#171f33] border-t border-[#454656]/20 flex gap-3">
-          {/* Share Button */}
-          <button
-            onClick={handleShare}
-            className={`py-3.5 px-5 rounded-xl font-bold text-sm transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0 ${
-              copied
-                ? 'bg-[#7dffa2] text-[#003918]'
-                : 'bg-[#222a3d] text-[#bdc2ff] border border-[#bdc2ff]/20 hover:bg-[#2d3449]'
-            }`}
-          >
-            <span className="material-symbols-outlined text-lg">{copied ? 'check' : 'share'}</span>
-          </button>
+        <div className="p-4 bg-[#171f33] border-t border-[#454656]/20 space-y-3">
+          {/* Top row: Share + Wishlist + Cart */}
+          <div className="flex gap-2">
+            {/* Share */}
+            <button
+              onClick={handleShare}
+              className={`flex-1 py-3 rounded-2xl font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-1.5 ripple ${
+                copied
+                  ? 'bg-[#7dffa2] text-[#003918]'
+                  : 'bg-[#222a3d] text-[#bdc2ff] border border-[#bdc2ff]/20 hover:bg-[#2d3449]'
+              }`}
+            >
+              <span className="material-symbols-outlined text-base">{copied ? 'check' : 'share'}</span>
+              <span>{copied ? 'تم النسخ!' : 'شارك'}</span>
+            </button>
 
-          {/* Buy Now Button */}
+            {/* Wishlist */}
+            <button
+              onClick={handleWishlist}
+              className={`wishlist-btn flex-1 py-3 rounded-2xl font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-1.5 ripple ${
+                inWishlist
+                  ? 'bg-rose-500/20 text-[#ffb4ab] border border-rose-500/30'
+                  : 'bg-[#222a3d] text-[#c5c5d8] border border-white/10 hover:text-rose-400'
+              }`}
+              aria-label={inWishlist ? 'إزالة من المفضلة' : 'أضف للمفضلة'}
+            >
+              <span
+                className="material-symbols-outlined text-base"
+                style={inWishlist ? { fontVariationSettings: "'FILL' 1" } : {}}
+              >
+                favorite
+              </span>
+              <span>{inWishlist ? 'في المفضلة' : 'المفضلة'}</span>
+            </button>
+
+            {/* Add to Cart */}
+            <button
+              onClick={handleAddToCart}
+              className={`flex-1 py-3 rounded-2xl font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-1.5 ripple ${
+                inCart
+                  ? 'bg-[#7dffa2]/20 text-[#7dffa2] border border-[#7dffa2]/30'
+                  : 'bg-[#222a3d] text-[#bdc2ff] border border-white/10 hover:bg-[#2d3449]'
+              }`}
+              aria-label={inCart ? 'في السلة' : 'أضف للسلة'}
+            >
+              <span
+                className="material-symbols-outlined text-base"
+                style={inCart ? { fontVariationSettings: "'FILL' 1" } : {}}
+              >
+                {inCart ? 'shopping_cart_checkout' : 'add_shopping_cart'}
+              </span>
+              <span>{inCart ? 'في السلة ✓' : 'السلة'}</span>
+            </button>
+          </div>
+
+          {/* Buy Now — Full Width */}
           <button
             onClick={() => {
-              alert('جاري توجيهك للمتجر للحصول على خصم الكاش باك المباشر!');
+              handleAddToCart();
               onClose();
             }}
-            className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-[#2d3fe3] via-[#8700d0] to-[#3647ea] text-white font-bold font-['Cairo'] text-sm shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#2d3fe3] via-[#8700d0] to-[#3647ea] text-white font-bold font-headline text-sm shadow-xl shadow-[#2d3fe3]/25 active:scale-95 transition-all flex items-center justify-center gap-2 ripple"
           >
-            <span className="material-symbols-outlined text-lg">shopping_cart</span>
-            <span>اشتري الآن واربح الكاش باك</span>
+            <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
+              shopping_cart_checkout
+            </span>
+            <span>اشتري الآن واربح {product.cashbackAmount.toLocaleString('ar-EG')} ج.م كاش باك</span>
           </button>
         </div>
       </div>

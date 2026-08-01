@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { mockTransactions } from '../data/mockData';
 
 interface WalletTabProps {
@@ -37,6 +37,17 @@ const txTypeLabels: Record<string, string> = {
   withdrawal: 'سحب',
 };
 
+// Monthly savings data for bar chart
+const monthlySavings = [
+  { month: 'يناير', amount: 280, color: '#bdc2ff' },
+  { month: 'فبراير', amount: 420, color: '#bdc2ff' },
+  { month: 'مارس', amount: 190, color: '#bdc2ff' },
+  { month: 'إبريل', amount: 550, color: '#bdc2ff' },
+  { month: 'مايو', amount: 380, color: '#bdc2ff' },
+  { month: 'يونيو', amount: 655, color: '#7dffa2' }, // current month
+];
+const maxSaving = Math.max(...monthlySavings.map((m) => m.amount));
+
 export const WalletTab: React.FC<WalletTabProps> = ({
   onOpenWithdraw,
   onOpenCouponCalc,
@@ -52,6 +63,14 @@ export const WalletTab: React.FC<WalletTabProps> = ({
   );
   const visibleTx = showAllTx ? filteredTx : filteredTx.slice(0, 4);
 
+  // Animate bars on mount
+  const [barsVisible, setBarsVisible] = useState(false);
+  const chartRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const timer = setTimeout(() => setBarsVisible(true), 200);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleWithdraw = () => {
     onOpenWithdraw();
     setWithdrawToast(true);
@@ -59,7 +78,7 @@ export const WalletTab: React.FC<WalletTabProps> = ({
   };
 
   return (
-    <div className="pt-24 pb-28 px-4 sm:px-6 max-w-6xl mx-auto space-y-6 animate-fade-in">
+    <div className="pt-28 pb-28 px-4 sm:px-8 max-w-[1360px] mx-auto space-y-8 animate-fade-in">
 
       {/* Withdraw Toast */}
       {withdrawToast && (
@@ -99,7 +118,7 @@ export const WalletTab: React.FC<WalletTabProps> = ({
 
                 <button
                   onClick={handleWithdraw}
-                  className="w-full mt-5 bg-white text-[#2d3fe3] hover:bg-slate-100 font-bold py-3 rounded-2xl text-sm flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md"
+                  className="w-full mt-5 bg-white text-[#2d3fe3] hover:bg-slate-100 font-bold py-3 rounded-2xl text-sm flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md ripple"
                 >
                   <span className="material-symbols-outlined text-xl">account_balance_wallet</span>
                   سحب الرصيد البنكي
@@ -141,10 +160,9 @@ export const WalletTab: React.FC<WalletTabProps> = ({
             </button>
           </section>
 
-          {/* ═══ NEW: Cashback Distribution Pie Chart ═══ */}
           <section className="bg-[#131b2e] border border-[#454656]/20 rounded-3xl p-5 space-y-4 shadow-xl">
             <div className="flex justify-between items-center">
-              <h3 className="font-['Cairo'] font-bold text-base text-[#dae2fd]">توزيع الكاش باك</h3>
+              <h3 className="font-headline font-bold text-base text-[#dae2fd]">توزيع الكاش باك</h3>
               <span className="text-[10px] bg-[#7dffa2]/10 text-[#7dffa2] px-2.5 py-1 rounded-md font-bold">هذا الشهر</span>
             </div>
 
@@ -174,20 +192,47 @@ export const WalletTab: React.FC<WalletTabProps> = ({
               </div>
             </div>
 
-            {/* Bar chart mini visualization */}
+            {/* Animated bar chart */}
             <div className="space-y-1.5 pt-1 border-t border-white/5">
               {cashbackSources.map((src) => (
                 <div key={src.label} className="flex items-center gap-2">
                   <span className="text-[10px] text-[#c5c5d8] w-12 text-right shrink-0">{src.label}</span>
-                  <div className="flex-1 h-1.5 bg-[#222a3d] rounded-full overflow-hidden">
+                  <div className="flex-1 h-2 bg-[#222a3d] rounded-full overflow-hidden">
                     <div
-                      className="h-full rounded-full transition-all"
-                      style={{ width: `${src.value}%`, background: src.color }}
+                      className="h-full rounded-full transition-all duration-700 ease-out"
+                      style={{
+                        width: barsVisible ? `${src.value}%` : '0%',
+                        background: src.color,
+                      }}
                     />
                   </div>
                   <span className="text-[10px] font-bold w-8 shrink-0" style={{ color: src.color }}>{src.value}%</span>
                 </div>
               ))}
+            </div>
+
+            {/* Monthly savings bar chart */}
+            <div className="pt-2 border-t border-white/5">
+              <p className="text-[10px] text-[#c5c5d8] mb-3 font-bold">التوفير الشهري (ج.م)</p>
+              <div ref={chartRef} className="flex items-end gap-1.5 h-20">
+                {monthlySavings.map((m, idx) => (
+                  <div key={idx} className="flex-1 flex flex-col items-center gap-1">
+                    <span className="text-[8px] text-[#c5c5d8]" style={{ color: m.color }}>
+                      {m.amount}
+                    </span>
+                    <div
+                      className="w-full rounded-t-lg transition-all duration-700 ease-out"
+                      style={{
+                        height: barsVisible ? `${(m.amount / maxSaving) * 56}px` : '0px',
+                        background: m.color,
+                        opacity: barsVisible ? 1 : 0,
+                        transitionDelay: `${idx * 80}ms`,
+                      }}
+                    />
+                    <span className="text-[7px] text-[#8899cc]">{m.month.slice(0, 3)}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
         </div>

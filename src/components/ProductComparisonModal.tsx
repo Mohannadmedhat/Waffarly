@@ -1,4 +1,5 @@
 import React from 'react';
+import { useWishlist } from '../context/WishlistContext';
 
 interface ProductComparisonModalProps {
   isOpen: boolean;
@@ -6,6 +7,7 @@ interface ProductComparisonModalProps {
 }
 
 export const ProductComparisonModal: React.FC<ProductComparisonModalProps> = ({ isOpen, onClose }) => {
+  const { toggleWishlist, addToCart, isInWishlist, isInCart } = useWishlist();
   if (!isOpen) return null;
 
   const compareProducts = [
@@ -126,20 +128,59 @@ export const ProductComparisonModal: React.FC<ProductComparisonModalProps> = ({ 
                   </div>
                 </div>
 
-                <button
-                  onClick={() => {
-                    alert(`جاري توجيهك لشراء ${p.name} والحصول على الكاش باك!`);
-                    onClose();
-                  }}
-                  className={`w-full py-3 rounded-xl font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-1.5 ${
-                    p.isWinner
-                      ? 'bg-gradient-to-r from-[#2d3fe3] to-[#3647ea] text-white shadow-lg shadow-[#2d3fe3]/20'
-                      : 'bg-[#171f33] text-[#bdc2ff] hover:bg-[#2d3449]'
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-base">shopping_cart</span>
-                  <span>اشتري الآن بهذا السعر</span>
-                </button>
+                <div className="flex gap-2">
+                  {/* Wishlist Button */}
+                  <button
+                    onClick={() => toggleWishlist({
+                      id: p.id,
+                      title: p.name,
+                      price: parseFloat(p.bestPrice.replace(/[^0-9.]/g, '')) || 14500,
+                      currency: 'ج.م',
+                      store: p.bestStore,
+                      storeLogo: '',
+                      productImage: p.image,
+                      cashbackAmount: parseFloat(p.cashback.replace(/[^0-9.]/g, '')) || 400,
+                    })}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all ripple active:scale-90 ${
+                      isInWishlist(p.id)
+                        ? 'bg-rose-500/20 text-[#ffb4ab] border-rose-500/30'
+                        : 'bg-[#171f33] text-[#c5c5d8] border-white/5 hover:text-rose-400'
+                    }`}
+                    aria-label="المفضلة"
+                  >
+                    <span className="material-symbols-outlined text-base" style={isInWishlist(p.id) ? { fontVariationSettings: "'FILL' 1" } : {}}>
+                      favorite
+                    </span>
+                  </button>
+
+                  {/* Add to Cart / Buy Now Button */}
+                  <button
+                    onClick={() => {
+                      addToCart({
+                        id: p.id,
+                        title: p.name,
+                        price: parseFloat(p.bestPrice.replace(/[^0-9.]/g, '')) || 14500,
+                        currency: 'ج.م',
+                        store: p.bestStore,
+                        storeLogo: '',
+                        productImage: p.image,
+                        cashbackAmount: parseFloat(p.cashback.replace(/[^0-9.]/g, '')) || 400,
+                      });
+                    }}
+                    className={`flex-1 py-3 rounded-xl font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-1.5 ripple ${
+                      p.isWinner
+                        ? 'bg-gradient-to-r from-[#2d3fe3] to-[#3647ea] text-white shadow-lg shadow-[#2d3fe3]/20'
+                        : isInCart(p.id)
+                        ? 'bg-[#7dffa2]/20 text-[#7dffa2] border border-[#7dffa2]/30'
+                        : 'bg-[#171f33] text-[#bdc2ff] hover:bg-[#2d3449]'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-base" style={isInCart(p.id) ? { fontVariationSettings: "'FILL' 1" } : {}}>
+                      {isInCart(p.id) ? 'shopping_cart_checkout' : 'shopping_cart'}
+                    </span>
+                    <span>{isInCart(p.id) ? 'في السلة ✓' : 'أضف للسلة'}</span>
+                  </button>
+                </div>
               </div>
             ))}
           </div>

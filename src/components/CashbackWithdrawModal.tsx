@@ -28,11 +28,11 @@ export const CashbackWithdrawModal: React.FC<CashbackWithdrawModalProps> = ({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[110] bg-[#0b1326]/85 backdrop-blur-2xl flex items-center justify-center p-4 animate-fade-in text-[#dae2fd] cursor-pointer"
+      className="fixed inset-0 z-[120] bg-[#0b1326]/85 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto animate-fade-in text-[#dae2fd] cursor-pointer"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-[#131b2e] border border-[#bdc2ff]/20 rounded-[36px] p-6 max-w-md w-full shadow-2xl relative space-y-6 cursor-default"
+        className="bg-[#131b2e] border border-[#bdc2ff]/25 rounded-[36px] p-6 max-w-md w-full shadow-2xl relative space-y-6 cursor-default my-auto max-h-[90vh] overflow-y-auto custom-scrollbar"
       >
         {/* Header */}
         <div className="flex justify-between items-center">
@@ -46,14 +46,40 @@ export const CashbackWithdrawModal: React.FC<CashbackWithdrawModalProps> = ({
         </div>
 
         {isSuccess ? (
-          <div className="py-8 text-center space-y-4 animate-scale-up">
-            <div className="w-20 h-20 bg-[#7dffa2]/20 rounded-full text-[#7dffa2] flex items-center justify-center mx-auto border border-[#7dffa2]/40 shadow-xl">
-              <span className="material-symbols-outlined text-5xl">check_circle</span>
+          <div className="relative py-10 text-center space-y-5 overflow-hidden animate-fade-in">
+            {/* Mini Confetti */}
+            {Array.from({ length: 18 }, (_, i) => (
+              <div
+                key={i}
+                className="confetti-piece"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 30}%`,
+                  background: ['#7dffa2', '#bdc2ff', '#e3b5ff', '#ffd700', '#ffb4ab'][i % 5],
+                  animationDelay: `${Math.random() * 0.4}s`,
+                  animationDuration: `${0.6 + Math.random() * 0.5}s`,
+                  width: `${6 + Math.random() * 6}px`,
+                  height: `${6 + Math.random() * 6}px`,
+                  borderRadius: Math.random() > 0.5 ? '50%' : '2px',
+                }}
+              />
+            ))}
+            {/* Animated check */}
+            <div className="relative w-24 h-24 mx-auto">
+              <div className="absolute inset-0 bg-[#7dffa2]/20 rounded-full animate-pulse" />
+              <div className="w-full h-full bg-[#7dffa2]/15 rounded-full border border-[#7dffa2]/40 flex items-center justify-center shadow-xl animate-pop-in">
+                <span className="material-symbols-outlined text-6xl text-[#7dffa2]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  check_circle
+                </span>
+              </div>
             </div>
-            <h3 className="font-['Cairo'] font-bold text-2xl text-[#dae2fd]">تم طلب السحب بنجاح!</h3>
-            <p className="text-xs text-[#c5c5d8] max-w-xs mx-auto">
-              سيتم تحويل مبلغ {amount} ج.م إلى حسابك عبر وسيلة السحب المختارة خلال دقائق.
-            </p>
+            <div className="space-y-1">
+              <h3 className="font-headline font-bold text-2xl text-[#dae2fd]">تم طلب السحب بنجاح! 🎉</h3>
+              <p className="text-3xl font-headline font-black text-[#7dffa2]">{amount} ج.م</p>
+              <p className="text-xs text-[#c5c5d8] max-w-xs mx-auto font-body leading-relaxed">
+                سيتم تحويل المبلغ إلى حسابك عبر وسيلة السحب المختارة خلال دقائق معدودة ✨
+              </p>
+            </div>
           </div>
         ) : (
           <form onSubmit={handleWithdraw} className="space-y-5">

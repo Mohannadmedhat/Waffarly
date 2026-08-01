@@ -130,14 +130,14 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab 
 
       {/* ═══ DESKTOP/TABLET: Right Sidebar ═══ */}
       <nav
-        className="hidden md:flex flex-col fixed top-0 right-0 bottom-0 z-50 bg-[#080f20]/92 backdrop-blur-2xl border-l border-white/8 shadow-[-8px_0_32px_rgba(0,0,0,0.4)]"
-        style={{ width: '72px' }}
+        className="hidden md:flex flex-col fixed top-0 right-0 bottom-0 z-50 bg-[#080f20]/95 backdrop-blur-2xl border-l border-white/8 shadow-[-8px_0_32px_rgba(0,0,0,0.5)]"
+        style={{ width: '80px' }}
         aria-label="Navigation"
       >
         {/* Logo */}
         <div className="flex flex-col items-center py-5 border-b border-white/8 mb-2">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#2d3fe3] to-[#8700d0] flex items-center justify-center shadow-lg shadow-[#2d3fe3]/30">
-            <span className="material-symbols-outlined text-white text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#2d3fe3] to-[#8700d0] flex items-center justify-center shadow-lg shadow-[#2d3fe3]/30">
+            <span className="material-symbols-outlined text-white text-[22px]" style={{ fontVariationSettings: "'FILL' 1" }}>
               savings
             </span>
           </div>
