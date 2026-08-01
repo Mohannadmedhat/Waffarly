@@ -81,11 +81,11 @@ export const LuckySpinModal: React.FC<LuckySpinModalProps> = ({ isOpen, onClose 
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[100] bg-[#0b1326]/85 backdrop-blur-2xl flex flex-col justify-center items-center p-4 animate-fade-in text-[#dae2fd] cursor-pointer"
+      className="fixed inset-0 z-[120] bg-[#0b1326]/85 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto animate-fade-in text-[#dae2fd] cursor-pointer"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-[#131b2e] border border-[#bdc2ff]/20 rounded-3xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] cursor-default"
+        className="relative bg-[#131b2e] border border-[#bdc2ff]/25 rounded-3xl w-full max-w-xl shadow-[0_20px_60px_rgba(0,0,0,0.85)] overflow-hidden flex flex-col my-auto max-h-[90vh] cursor-default custom-scrollbar"
       >
         {/* Confetti overlay */}
         {showConfetti && <Confetti />}

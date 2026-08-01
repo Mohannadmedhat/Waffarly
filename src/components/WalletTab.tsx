@@ -266,14 +266,26 @@ export const WalletTab: React.FC<WalletTabProps> = ({
             </div>
           </section>
 
-          {/* ═══ UPGRADED: Transaction History with Filters ═══ */}
+          {/* ═══ UPGRADED: Transaction History with Filters & PDF Export ═══ */}
           <section className="space-y-4">
             <div className="flex justify-between items-center px-1">
-              <h2 className="font-['Cairo'] font-bold text-xl text-[#dae2fd]">سجل المعاملات</h2>
-              <div className="flex items-center gap-1.5 text-[10px] text-[#c5c5d8]">
-                <span className="material-symbols-outlined text-xs text-[#7dffa2]">receipt_long</span>
-                {mockTransactions.length} معاملة
+              <div className="flex items-center gap-2">
+                <h2 className="font-headline font-bold text-xl text-white">سجل المعاملات والتحويلات</h2>
+                <span className="bg-[#7dffa2]/15 text-[#7dffa2] border border-[#7dffa2]/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full font-headline">
+                  {mockTransactions.length} معاملة
+                </span>
               </div>
+
+              <button
+                onClick={() => {
+                  window.print();
+                }}
+                className="px-3 py-1.5 rounded-xl bg-[#222a3d] hover:bg-[#2d3449] border border-white/10 text-[#bdc2ff] hover:text-white text-xs font-headline font-bold transition-all flex items-center gap-1.5 active:scale-95 ripple"
+                title="طباعة أو حفظ كشف حساب المحفظة"
+              >
+                <span className="material-symbols-outlined text-sm">print</span>
+                <span>تصدير كشف حساب</span>
+              </button>
             </div>
 
             {/* Transaction Type Filter */}
