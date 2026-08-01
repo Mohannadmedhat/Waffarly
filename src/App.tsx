@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { NavTab, DealItem } from './types';
 import { WishlistProvider } from './context/WishlistContext';
 import { Header } from './components/Header';
@@ -8,21 +8,23 @@ import { AssistantTab } from './components/AssistantTab';
 import { WalletTab } from './components/WalletTab';
 import { SearchTab } from './components/SearchTab';
 import { AccountTab } from './components/AccountTab';
-import { OnboardingModal } from './components/OnboardingModal';
-import { ProductDetailModal } from './components/ProductDetailModal';
-import { CashbackWithdrawModal } from './components/CashbackWithdrawModal';
-import { NotificationCenterModal } from './components/NotificationCenterModal';
-import { PriceTrackerModal } from './components/PriceTrackerModal';
-import { CouponCalculatorModal } from './components/CouponCalculatorModal';
-import { NearbyDealsModal } from './components/NearbyDealsModal';
-import { ReferralRewardsModal } from './components/ReferralRewardsModal';
-import { ProductComparisonModal } from './components/ProductComparisonModal';
-import { GiftCardsHubModal } from './components/GiftCardsHubModal';
-import { LuckySpinModal } from './components/LuckySpinModal';
-import { SupportTicketModal } from './components/SupportTicketModal';
-import { StoreDealsModal } from './components/StoreDealsModal';
 import { CartDrawer } from './components/CartDrawer';
 import { GlobalToast } from './components/GlobalToast';
+
+// Code Splitting & Lazy Loading Modals for Maximum Performance
+const OnboardingModal = lazy(() => import('./components/OnboardingModal').then((m) => ({ default: m.OnboardingModal })));
+const ProductDetailModal = lazy(() => import('./components/ProductDetailModal').then((m) => ({ default: m.ProductDetailModal })));
+const CashbackWithdrawModal = lazy(() => import('./components/CashbackWithdrawModal').then((m) => ({ default: m.CashbackWithdrawModal })));
+const NotificationCenterModal = lazy(() => import('./components/NotificationCenterModal').then((m) => ({ default: m.NotificationCenterModal })));
+const PriceTrackerModal = lazy(() => import('./components/PriceTrackerModal').then((m) => ({ default: m.PriceTrackerModal })));
+const CouponCalculatorModal = lazy(() => import('./components/CouponCalculatorModal').then((m) => ({ default: m.CouponCalculatorModal })));
+const NearbyDealsModal = lazy(() => import('./components/NearbyDealsModal').then((m) => ({ default: m.NearbyDealsModal })));
+const ReferralRewardsModal = lazy(() => import('./components/ReferralRewardsModal').then((m) => ({ default: m.ReferralRewardsModal })));
+const ProductComparisonModal = lazy(() => import('./components/ProductComparisonModal').then((m) => ({ default: m.ProductComparisonModal })));
+const GiftCardsHubModal = lazy(() => import('./components/GiftCardsHubModal').then((m) => ({ default: m.GiftCardsHubModal })));
+const LuckySpinModal = lazy(() => import('./components/LuckySpinModal').then((m) => ({ default: m.LuckySpinModal })));
+const SupportTicketModal = lazy(() => import('./components/SupportTicketModal').then((m) => ({ default: m.SupportTicketModal })));
+const StoreDealsModal = lazy(() => import('./components/StoreDealsModal').then((m) => ({ default: m.StoreDealsModal })));
 
 function AppInner() {
   const [activeTab, setActiveTab] = useState<NavTab>('home');
@@ -125,7 +127,6 @@ function AppInner() {
           <div key="account" className="animate-slide-up">
             <AccountTab
               onOpenOnboarding={() => setIsOnboardingOpen(true)}
-              onOpenWithdraw={() => setIsWithdrawOpen(true)}
               onOpenNotifications={() => setIsNotificationsOpen(true)}
               onOpenPriceTracker={() => setIsPriceTrackerOpen(true)}
               onOpenCouponCalc={() => setIsCouponCalcOpen(true)}
@@ -140,28 +141,30 @@ function AppInner() {
       {/* Navigation */}
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* Modals */}
-      <OnboardingModal isOpen={isOnboardingOpen} onClose={() => setIsOnboardingOpen(false)} />
-      <ProductDetailModal isOpen={isProductDetailOpen} onClose={() => setIsProductDetailOpen(false)} />
-      <CashbackWithdrawModal isOpen={isWithdrawOpen} onClose={() => setIsWithdrawOpen(false)} />
-      <NotificationCenterModal isOpen={isNotificationsOpen} onClose={() => setIsNotificationsOpen(false)} />
-      <PriceTrackerModal
-        isOpen={isPriceTrackerOpen}
-        onClose={() => setIsPriceTrackerOpen(false)}
-        onSelectProduct={() => setIsProductDetailOpen(true)}
-      />
-      <CouponCalculatorModal isOpen={isCouponCalcOpen} onClose={() => setIsCouponCalcOpen(false)} />
-      <NearbyDealsModal isOpen={isNearbyDealsOpen} onClose={() => setIsNearbyDealsOpen(false)} />
-      <ReferralRewardsModal isOpen={isReferralOpen} onClose={() => setIsReferralOpen(false)} />
-      <ProductComparisonModal isOpen={isComparisonOpen} onClose={() => setIsComparisonOpen(false)} />
-      <GiftCardsHubModal isOpen={isGiftCardsOpen} onClose={() => setIsGiftCardsOpen(false)} />
-      <LuckySpinModal isOpen={isLuckySpinOpen} onClose={() => setIsLuckySpinOpen(false)} />
-      <SupportTicketModal isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
-      <StoreDealsModal
-        isOpen={isStoreDealsOpen}
-        onClose={() => setIsStoreDealsOpen(false)}
-        onSelectProduct={() => setIsProductDetailOpen(true)}
-      />
+      {/* Lazy Loaded Modals with Suspense */}
+      <Suspense fallback={null}>
+        <OnboardingModal isOpen={isOnboardingOpen} onClose={() => setIsOnboardingOpen(false)} />
+        <ProductDetailModal isOpen={isProductDetailOpen} onClose={() => setIsProductDetailOpen(false)} />
+        <CashbackWithdrawModal isOpen={isWithdrawOpen} onClose={() => setIsWithdrawOpen(false)} />
+        <NotificationCenterModal isOpen={isNotificationsOpen} onClose={() => setIsNotificationsOpen(false)} />
+        <PriceTrackerModal
+          isOpen={isPriceTrackerOpen}
+          onClose={() => setIsPriceTrackerOpen(false)}
+          onSelectProduct={() => setIsProductDetailOpen(true)}
+        />
+        <CouponCalculatorModal isOpen={isCouponCalcOpen} onClose={() => setIsCouponCalcOpen(false)} />
+        <NearbyDealsModal isOpen={isNearbyDealsOpen} onClose={() => setIsNearbyDealsOpen(false)} />
+        <ReferralRewardsModal isOpen={isReferralOpen} onClose={() => setIsReferralOpen(false)} />
+        <ProductComparisonModal isOpen={isComparisonOpen} onClose={() => setIsComparisonOpen(false)} />
+        <GiftCardsHubModal isOpen={isGiftCardsOpen} onClose={() => setIsGiftCardsOpen(false)} />
+        <LuckySpinModal isOpen={isLuckySpinOpen} onClose={() => setIsLuckySpinOpen(false)} />
+        <SupportTicketModal isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
+        <StoreDealsModal
+          isOpen={isStoreDealsOpen}
+          onClose={() => setIsStoreDealsOpen(false)}
+          onSelectProduct={() => setIsProductDetailOpen(true)}
+        />
+      </Suspense>
     </div>
   );
 }
