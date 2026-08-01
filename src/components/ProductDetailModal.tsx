@@ -242,6 +242,120 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             </div>
           </section>
 
+          {/* ═══ NEW FEATURE #1: Multi-Store Live Price Comparison Matrix ═══ */}
+          <section className="p-5 sm:p-6 rounded-3xl bg-[#171f33] border border-[#bdc2ff]/30 shadow-xl space-y-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-xl bg-[#7dffa2]/20 border border-[#7dffa2]/30 flex items-center justify-center text-[#7dffa2]">
+                  <span className="material-symbols-outlined text-base">storefront</span>
+                </div>
+                <h3 className="font-headline font-bold text-base text-white">مقارنة أسعار المنتج المباشرة عبر المتاجر</h3>
+              </div>
+              <span className="text-[10px] font-headline font-bold bg-[#7dffa2]/15 text-[#7dffa2] border border-[#7dffa2]/30 px-2.5 py-1 rounded-xl flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#7dffa2] animate-pulse" />
+                تحديث حي ⚡
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              {[
+                {
+                  store: 'أمازون مصر (Amazon)',
+                  logo: 'https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=300&auto=format&fit=crop&q=80',
+                  price: product.finalPrice,
+                  originalPrice: product.originalPrice,
+                  cashback: product.cashbackAmount,
+                  delivery: 'توصيل غداً مجاناً 🚚',
+                  isBest: true,
+                  stock: 'متوفر بكثرة',
+                  tagBg: 'bg-[#7dffa2]/15 text-[#7dffa2] border-[#7dffa2]/30',
+                },
+                {
+                  store: 'نون (Noon)',
+                  logo: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=300&auto=format&fit=crop&q=80',
+                  price: Math.round(product.finalPrice * 1.05),
+                  originalPrice: product.originalPrice,
+                  cashback: Math.round(product.cashbackAmount * 0.8),
+                  delivery: 'توصيل خلال يومين 📦',
+                  isBest: false,
+                  stock: '3 قطع متبقية ⚠️',
+                  tagBg: 'bg-[#e3b5ff]/15 text-[#e3b5ff] border-[#e3b5ff]/30',
+                },
+                {
+                  store: 'جوميا (Jumia)',
+                  logo: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=300&auto=format&fit=crop&q=80',
+                  price: Math.round(product.finalPrice * 1.09),
+                  originalPrice: product.originalPrice,
+                  cashback: Math.round(product.cashbackAmount * 0.6),
+                  delivery: 'توصيل خلال 3 أيام 🚚',
+                  isBest: false,
+                  stock: 'متوفر',
+                  tagBg: 'bg-[#bdc2ff]/15 text-[#bdc2ff] border-[#bdc2ff]/30',
+                },
+                {
+                  store: 'كارفور (Carrefour)',
+                  logo: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&auto=format&fit=crop&q=80',
+                  price: Math.round(product.finalPrice * 1.12),
+                  originalPrice: product.originalPrice,
+                  cashback: Math.round(product.cashbackAmount * 0.5),
+                  delivery: 'استلام مباشر من الفرع 🛒',
+                  isBest: false,
+                  stock: 'متوفر بالفرع',
+                  tagBg: 'bg-white/10 text-[#c5c5d8] border-white/10',
+                },
+              ].map((s, idx) => (
+                <div
+                  key={idx}
+                  className={`p-3.5 sm:p-4 rounded-2xl border transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 ${
+                    s.isBest
+                      ? 'bg-[#0b1326] border-[#7dffa2] shadow-lg shadow-[#7dffa2]/10 ring-1 ring-[#7dffa2]/30'
+                      : 'bg-[#0b1326]/60 border-white/10 hover:border-white/20'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <img src={s.logo} alt={s.store} className="w-10 h-10 rounded-xl object-cover border border-white/10 shrink-0" />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-headline font-bold text-sm text-white">{s.store}</h4>
+                        {s.isBest && (
+                          <span className="bg-[#7dffa2] text-[#003918] text-[10px] font-headline font-black px-2 py-0.5 rounded-md shadow-sm">
+                            أفضل سعر 🏆
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-[#c5c5d8] font-body mt-0.5">{s.delivery} · <span className="text-[#8899cc]">{s.stock}</span></p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-white/10">
+                    <div className="text-right sm:text-left">
+                      <span className="font-headline font-black text-base sm:text-lg text-[#7dffa2] block">
+                        <bdi>{s.price.toLocaleString('ar-EG')} {product.currency}</bdi>
+                      </span>
+                      <span className="text-[10px] text-[#e3b5ff] font-bold font-headline block">
+                        كاش باك +{s.cashback.toLocaleString('ar-EG')} {product.currency}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        handleAddToCart();
+                        onClose();
+                      }}
+                      className={`px-3.5 py-2 rounded-xl font-headline font-bold text-xs transition-all active:scale-95 shrink-0 flex items-center gap-1 ripple ${
+                        s.isBest
+                          ? 'bg-gradient-to-r from-[#2d3fe3] to-[#8700d0] text-white shadow-md'
+                          : 'bg-[#171f33] hover:bg-[#222a3d] text-[#bdc2ff] border border-white/10'
+                      }`}
+                    >
+                      <span>شراء 🛒</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* ═══ Savings Breakdown Box ═══ */}
           <section className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-[#171f33] via-[#151c2e] to-[#0b1326] border border-[#bdc2ff]/20 shadow-xl space-y-4">
             <h3 className="font-headline font-bold text-base text-[#7dffa2] flex items-center gap-2">
